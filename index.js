@@ -4,7 +4,13 @@ const mongoose = require('./connection/turfConn')
 const AllBookedSlots =require('./model/model')
 require('dotenv').config()
 const app = express()
-app.use(cors())
+
+const corsCongig={
+  origin:"*",
+  Credential:true,
+  methods:["GET","POST","PUT","DELETE"],
+}
+app.use(cors(corsCongig))
 app.use(express.json())
 
 const port =process.env.PORT
