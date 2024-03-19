@@ -1,27 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('./connection/turfConn')
+const AllBookedSlots =require('./model/model')
 require('dotenv').config()
 const app = express()
 app.use(cors())
 app.use(express.json())
 
 const port =process.env.PORT
-
-const slotSchema = new mongoose.Schema({
-  name: String,
-  price: Number,
-  turfName: String,
-  date: String,
-  from: String,
-  to: String,
-  totalPrice: Number,
-  
-});
-
-
-// Create a model from the schema
-const AllBookedSlots = mongoose.model('AllBookedSlots', slotSchema);
 
 
 
@@ -71,9 +57,6 @@ app.post('/deleteLast', async (req, res) => {
   const result = await AllBookedSlots.findByIdAndDelete(_id)
   res.json({ msg: 'deleted', result })
 })
-
-
-
 
 
 app.listen(port, () => {
