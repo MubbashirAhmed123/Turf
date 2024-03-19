@@ -46,6 +46,10 @@ const insertIntoDb = async (data) => {
 }
 
 
+app.get('/',(req,res)=>{
+  res.json({msg:'hello'})
+})
+
 app.get('/allSlots', async (req, res) => {
   const data = await AllBookedSlots.find()
   res.json(data)
