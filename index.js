@@ -28,14 +28,7 @@ const AllBookedSlots = mongoose.model('AllBookedSlots', slotSchema);
 const insertIntoDb = async (data) => {
   const { name, price, turfName, date, from, to, totalPrice } = data
 
-   const fromTime=new Date(date + 'T' + from + ':00')
-   const toDate=new Date(date + 'T' + to + ':00')
-   let expirationTime
 
-
-   console.log(expirationTime)
-
-   console.log(fromDate,toDate)
   try {
     const slot = new AllBookedSlots({
 
