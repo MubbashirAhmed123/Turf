@@ -11,6 +11,7 @@ const corsCongig={
   methods:["GET","POST","PUT","DELETE"],
 }
 app.use(cors(corsCongig))
+app.options("",cors(corsCongig))
 app.use(express.json())
 
 const port =process.env.PORT
