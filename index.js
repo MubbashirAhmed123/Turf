@@ -5,13 +5,13 @@ const AllBookedSlots =require('./model/model')
 require('dotenv').config()
 const app = express()
 
-const corsCongig={
+const corsConfig={
   origin:"*",
   Credential:true,
   methods:["GET","POST","PUT","DELETE"],
 }
-app.use(cors(corsCongig))
-app.options("",cors(corsCongig))
+app.use(cors(corsConfig))
+app.options("",cors(corsConfig))
 app.use(express.json())
 
 const port =process.env.PORT
