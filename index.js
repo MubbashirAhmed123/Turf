@@ -19,10 +19,11 @@ const app = express()
 
 
 const corsConfig = {
-  origin: "https://turfbooking.vercel.app",
+  origin: "https://turf-booking-app.vercel.app",
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
 }
+
 
 app.use(cors(corsConfig))
 app.options("", cors(corsConfig))
