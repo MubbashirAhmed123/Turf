@@ -33,7 +33,7 @@ app.use(session({
   secret:process.env.SECREC_KEY,
   resave:false,
   saveUninitialized:true,
-  cookie:{maxAge:120000,secure:true,httpOnly:true}
+  cookie:{maxAge:120000,secure:true,httpOnly:true,sameSite:'strict'}
 }))
 
 // app.use((req,res,next)=>{
