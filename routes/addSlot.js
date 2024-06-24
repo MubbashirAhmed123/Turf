@@ -14,7 +14,6 @@ const insertIntoDb = async (data) => {
     })
 
     const result = await slot.save()
-    console.log(result)
 
   } catch (error) {
     console.log(error)

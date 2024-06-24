@@ -3,8 +3,9 @@ const mongoose =require('mongoose')
 
 const adminSchema = new mongoose.Schema({
     email: String,
+    turfName:String,
     password: String,
-    turfName:String
+
   })
 
   const Admin = mongoose.model('Admin', adminSchema)

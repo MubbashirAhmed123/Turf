@@ -6,19 +6,21 @@ const Admin = require('./model/adminModel');
 
 require('dotenv').config()
 
-
 const getAllSlots =require('./routes/allSlots')
 const getSingleSlot=require('./routes/singleSlot')
 const addSlot =require('./routes/addSlot')
 const deleteSlot=require('./routes/deleteSlot')
-const adminLogin =require('./routes/login')
+const adminLogin =require('./routes/login');
+const dashboard=require('./routes/login')
+const logout=require('./routes/login')
+const session = require('express-session');
 
 const app = express()
 
 
 const corsConfig = {
-  origin: "*",
-  Credential: true,
+  origin: "http://localhost:3000",
+  credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
 }
 
@@ -26,13 +28,25 @@ app.use(cors(corsConfig))
 app.options("", cors(corsConfig))
 app.use(express.json())
 
+app.use(session({
+  secret:process.env.SECREC_KEY,
+  resave:false,
+  saveUninitialized:true,
+  cookie:{maxAge:120000}
+}))
+
+// app.use((req,res,next)=>{
+//   res.header('Access-Control-Allow-Origin',req.headers.origin)
+//   res.header('Access-Control-Allow-Credentials',true)
+//   res.header('Access-Control-Allow-Headers','Origin,X-Request-With,Content-Type,Accept')
+
+// })
 
 const port = process.env.PORT
 
-const hashStr = 'KbnTurf@123'
-const hash = crypto.createHash('sha256').update(hashStr).digest('hex')
-console.log(hash)
 
+
+// console.log(crypto.createHash('sha256').update(hashstr).digest('hex'))
 
 app.get('/', (req, res) => {
   res.json({ msg: 'hello' })
@@ -49,7 +63,12 @@ app.use('/',addSlot)
 
 app.use('/',adminLogin)
 
+app.use('/',dashboard)
+
+app.use('/',logout)
+
 app.use('/', deleteSlot)
+
 
 
 

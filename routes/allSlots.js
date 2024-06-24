@@ -6,7 +6,6 @@ const routes=express.Router()
 routes.get('/allSlots', async(req, res) => {
     const data = await AllBookedSlots.find()
     res.json(data)
-    console.log(data)
 })
 
 

@@ -11,15 +11,12 @@ const verify = (data) => {
 }
 
 
-
-
 routes.post('/login', async (req, res) => {
 
-    console.log(req.body)
 
     const { email, turfName, password } = req.body
+
     const result = await Admin.findOne({ email })
-    console.log(result)
 
     if (result === null) {
         return res.status(400).json({ msg: 'admin not found!' })
@@ -28,17 +25,37 @@ routes.post('/login', async (req, res) => {
     const isPsswordMatch = verify(password)
 
     if (isPsswordMatch === result.password && turfName === result.turfName) {
-        
+        req.session.admin=turfName 
        
-        return res.json({ msg: 'login successfull',auth:true, name:turfName }) 
+        return res.status(200).json({ msg: 'login successfull',name:req.session.admin }) 
 
     } else {
-        return res.status(400).json({ msg: 'admin not found!' })
+        return res.status(404).json({ msg: 'admin not found!' })
 
     }
 
 })
 
+
+routes.get('/dashboard',(req,res)=>{
+    if(req.session.admin){
+        res.status(200).send({msg:'welcom to admin dashboard',name:req.session.admin})
+    }else{
+       return res.status(403).send({msg:'unauthorized!, login once again.'})
+
+    }
+})
+
+
+routes.get('/logout',(req,res)=>{
+    if(req.session.admin){
+        req.session.destroy()
+       return res.status(200).send({msg:'logout successfully!'})
+        
+    }else{
+       return res.status(400).send({msg:'something went wrong'})
+    }
+})
   
 
 module.exports = routes
