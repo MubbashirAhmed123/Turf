@@ -33,7 +33,7 @@ app.use(session({
   secret:process.env.SECREC_KEY,
   resave:false,
   saveUninitialized:true,
-  cookie:{maxAge:120000,secure:true,httpOnly:true,sameSite:'none'}
+  cookie:{maxAge:120000,secure:true,domain:'https://turf-booking-app.vercel.app',sameSite:'none'}
 }))
 
 // app.use((req,res,next)=>{
