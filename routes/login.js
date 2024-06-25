@@ -27,7 +27,7 @@ routes.post('/login', async (req, res) => {
     if (isPsswordMatch === result.password && turfName === result.turfName) {
         req.session.admin=turfName 
        
-        return res.status(200).json({ msg: 'login successfull',name:req.session.admin }) 
+        return res.cookie('admin',turfName,{httpOnly:true,expires:120000,secure:true,sameSite:'none'}).status(200).json({ msg: 'login successfull',name:req.session.admin }) 
 
     } else {
         return res.status(404).json({ msg: 'admin not found!' })
