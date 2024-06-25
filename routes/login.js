@@ -11,9 +11,21 @@ const verify = (data) => {
 }
 
 
+let isLoggedIn=false
+
+const isAdmin=((req,res,next)=>{
+    const token=req.headers['authorization']
+    if(token==='admin-token'){
+        next()
+    }else{
+        res.status(401).send({msg:'Unauthorized'})
+    }
+})
+
+
 routes.post('/login', async (req, res) => {
 
-
+    
     const { email, turfName, password } = req.body
 
     const result = await Admin.findOne({ email })
@@ -25,9 +37,9 @@ routes.post('/login', async (req, res) => {
     const isPsswordMatch = verify(password)
 
     if (isPsswordMatch === result.password && turfName === result.turfName) {
-        req.session.admin=turfName 
+        isLoggedIn=true
        
-        return res.status(200).json({ msg: 'login successfull',name:req.session.admin }) 
+        return res.status(200).json({ msg: 'login successfull',name:turfName}) 
 
     } else {
         return res.status(404).json({ msg: 'admin not found!' })
@@ -38,23 +50,20 @@ routes.post('/login', async (req, res) => {
 
 
 routes.get('/dashboard',(req,res)=>{
-    if(req.session.admin){
-        res.status(200).send({msg:'welcom to admin dashboard',name:req.session.admin})
+    if(isLoggedIn){
+        res.status(200).send({msg:'welcom to admin dashboard'})
     }else{
-       return res.status(403).send({msg:'unauthorized!, login once again.'})
-
+        res.status(403).send({msg:'not authorized'})
     }
+    
 })
 
 
 routes.get('/logout',(req,res)=>{
-    if(req.session.admin){
-        req.session.destroy()
-       return res.status(200).send({msg:'logout successfully!'})
+    isLoggedIn=false
+    return res.status(200).send({msg:'logout successfully!'})
         
-    }else{
-       return res.status(400).send({msg:'something went wrong'})
-    }
+
 })
   
 

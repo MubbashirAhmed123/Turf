@@ -5,8 +5,8 @@ const routes=express.Router()
 
 
 routes.post('/deleteLast',async (req, res) => {
-    console.log(req.body)
-    const { _id } = req.body
+
+  const { _id } = req.body
     try {
       const result = await AllBookedSlots.findByIdAndDelete(_id)
       res.status(200).json({ msg: 'Your Booking Has Been Cancelled' })
