@@ -32,8 +32,8 @@ app.use(express.json())
 app.use(session({
   secret:process.env.SECREC_KEY,
   resave:false,
-  saveUninitialized:true ==='production',
-  cookie:{maxAge:120000,secure:true,domain:'https://turf-booking-app.vercel.app',sameSite:'none'}
+  saveUninitialized:true,
+  cookie:{maxAge:120000,secure:process.env.NODE_ENV === 'production',domain:'https://turf-booking-app.vercel.app',sameSite:'none'}
 }))
 
 // app.use((req,res,next)=>{
