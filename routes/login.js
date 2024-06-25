@@ -27,7 +27,7 @@ routes.post('/login', async (req, res) => {
     if (isPsswordMatch === result.password && turfName === result.turfName) {
         req.session.admin=turfName 
        
-        return res.cookie('admin',turfName,{httpOnly:true,expires:120000,secure:true,sameSite:'none'}).status(200).json({ msg: 'login successfull',name:req.session.admin }) 
+        return res.status(200).json({ msg: 'login successfull',name:req.session.admin }) 
 
     } else {
         return res.status(404).json({ msg: 'admin not found!' })
@@ -39,7 +39,7 @@ routes.post('/login', async (req, res) => {
 
 routes.get('/dashboard',(req,res)=>{
     if(req.session.admin){
-        res.status(200).send({msg:'welcom to admin dashboard',name:req.session.admin})
+        res.cookie('admin',req.session.admin,{httpOnly:true,expires:120000,secure:true,sameSite:'none'}).status(200).send({msg:'welcom to admin dashboard',name:req.session.admin})
     }else{
        return res.status(403).send({msg:'unauthorized!, login once again.'})
 
