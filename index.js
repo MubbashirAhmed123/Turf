@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const {appendFile}=require('fs/promises')
 const mongoose = require('./connection/turfConn')
 
 require('dotenv').config()
@@ -11,13 +12,14 @@ const deleteSlot=require('./routes/deleteSlot')
 const adminLogin =require('./routes/login');
 const dashboard=require('./routes/login')
 
-const logout=require('./routes/login')
+const logout=require('./routes/login');
+const { json } = require('body-parser');
 
 const app = express()
 
 
 const corsConfig = {
-  origin: "https://turf-booking-app.vercel.app",
+  origin: "*",
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
 }
@@ -27,13 +29,28 @@ app.use(cors(corsConfig))
 app.options("*", cors(corsConfig))
 app.use(express.json())
 
-
-
 const port = process.env.PORT
 
 
 app.get('/', (req, res) => {
   res.json({ msg: 'hello' })
+
+})
+
+app.use(async(req,res,next)=>{
+  const userInfo={
+    ip:req.ip,
+    method:req.method,
+    url:req.originalUrl,
+    headers:req.headers,
+    timestamp:new Date().toString()
+  }
+  console.log(userInfo)
+
+  await appendFile('userlog.json',JSON.stringify(userInfo))
+
+
+  next()
 
 })
 

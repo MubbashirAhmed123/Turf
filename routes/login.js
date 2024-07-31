@@ -1,5 +1,6 @@
 const express = require('express')
 const crypto = require('crypto')
+const jwt=require('jsonwebtoken')
 require('dotenv').config()
 const Admin = require('../model/adminModel');
 
@@ -38,8 +39,10 @@ routes.post('/login', async (req, res) => {
 
     if (isPsswordMatch === result.password && turfName === result.turfName) {
         isLoggedIn=true
+
+        const token=jwt.sign({email:result.email},process.env.JWT_SECRET_KEY,{ expiresIn: '1h' })
        
-        return res.status(200).json({ msg: 'login successfull',name:turfName}) 
+        return res.status(200).json({ msg: 'login successfull',name:turfName,token}) 
 
     } else {
         return res.status(404).json({ msg: 'admin not found!' })
@@ -50,11 +53,20 @@ routes.post('/login', async (req, res) => {
 
 
 routes.get('/dashboard',(req,res)=>{
-    if(isLoggedIn){
-        res.status(200).send({msg:'welcom to admin dashboard'})
-    }else{
-        res.status(403).send({msg:'not authorized'})
+    
+    const header=req.headers['authorization']
+    if(header){
+        const token=header.split(' ')[1]
+        jwt.verify(token,process.env.JWT_SECRET_KEY, (err, user) => {
+            if (err) {
+                return res.status(403).json({ msg: "Unauthorized access." });
+            }
+            req.email = user.email; 
+            res.status(200).send({msg:'welcom to admin dashboard'})
+
+        })
     }
+  
     
 })
 
