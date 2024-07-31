@@ -10,14 +10,7 @@ const verify = (data) => {
     return crypto.createHash('sha256').update(data).digest('hex');
 };
 
-const isAdmin = (req, res, next) => {
-    const token = req.headers['authorization'];
-    if (token === 'admin-token') {
-        next();
-    } else {
-        res.status(401).send({ msg: 'Unauthorized' });
-    }
-};
+
 
 routes.post('/login', async (req, res) => {
     console.log(req.body)
@@ -30,7 +23,11 @@ routes.post('/login', async (req, res) => {
         }
 
         const isPasswordMatch = verify(password);
+
         if (isPasswordMatch === result.password && turfName === result.turfName) {
+
+            console.log(result,process.env.JWT_SECRET_KEY)
+
             const token = jwt.sign({ email: result.email }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
             return res.status(200).json({ msg: 'Login successful', name: turfName, token });
         } else {
@@ -43,6 +40,7 @@ routes.post('/login', async (req, res) => {
 
 routes.get('/dashboard', (req, res) => {
     const header = req.headers['authorization'];
+    console.log(header)
     if (header) {
         const token = header.split(' ')[1];
         jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user) => {

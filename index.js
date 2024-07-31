@@ -10,7 +10,6 @@ const addSlot =require('./routes/addSlot')
 const deleteSlot=require('./routes/deleteSlot')
 const adminLogin =require('./routes/login');
 const dashboard=require('./routes/login')
-
 const logout=require('./routes/login');
 
 const app = express()
