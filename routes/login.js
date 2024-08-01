@@ -26,9 +26,8 @@ routes.post('/login', async (req, res) => {
 
         if (isPasswordMatch === result.password && turfName === result.turfName) {
 
-            console.log(result,process.env.JWT_SECRET_KEY)
-
             const token = jwt.sign({ email: result.email }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+
             return res.status(200).json({ msg: 'Login successful', name: turfName, token });
         } else {
             return res.status(400).json({ msg: 'Invalid credentials!' });
@@ -38,22 +37,7 @@ routes.post('/login', async (req, res) => {
     }
 });
 
-routes.get('/dashboard', (req, res) => {
-    const header = req.headers['authorization'];
-    console.log(header)
-    if (header) {
-        const token = header.split(' ')[1];
-        jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user) => {
-            if (err) {
-                return res.status(403).json({ msg: 'Unauthorized access.' });
-            }
-            req.email = user.email;
-            res.status(200).send({ msg: 'Welcome to admin dashboard' });
-        });
-    } else {
-        return res.status(401).json({ msg: 'Authorization header not found' });
-    }
-});
+
 
 routes.get('/logout', (req, res) => {
     return res.status(200).send({ msg: 'Logout successfully!' });

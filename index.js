@@ -9,8 +9,8 @@ const getSingleSlot=require('./routes/singleSlot')
 const addSlot =require('./routes/addSlot')
 const deleteSlot=require('./routes/deleteSlot')
 const adminLogin =require('./routes/login');
-const dashboard=require('./routes/login')
 const logout=require('./routes/login');
+const protectedRoutes=require('./middleware/authMiddleware')
 
 const app = express()
 
@@ -43,7 +43,7 @@ app.use('/',addSlot)
 
 app.use('/',adminLogin)
 
-app.use('/',dashboard)
+app.use('/',protectedRoutes)
 
 app.use('/',logout)
 
